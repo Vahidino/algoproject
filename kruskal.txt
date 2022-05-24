@@ -1,0 +1,143 @@
+#include <stdio.h>
+#include <conio.h>
+#include <stdlib.h>
+using namespace std;
+/*int i, j, k, a, b, u, v, n, ne = 1;
+int min, mincost = 0, cost[9][9], parent[9];
+int find(int);
+int uni(int, int);
+void main()
+{
+    printf("\n\tImplementation of Kruskal's Algorithm\n");
+    printf("\nEnter the no. of vertices:");
+    scanf_s("%d", &n);
+    printf("\nEnter the cost adjacency matrix:\n");
+    for (i = 1; i <= n; i++)
+    {
+        for (j = 1; j <= n; j++)
+        {
+            scanf_s("%d", &cost[i][j]);
+            if (cost[i][j] == 0)
+                cost[i][j] = 999;
+        }
+    }
+    printf("The edges of Minimum Cost Spanning Tree are\n");
+    while (ne < n)
+    {
+        for (i = 1, min = 999; i <= n; i++)
+        {
+            for (j = 1; j <= n; j++)
+            {
+                if (cost[i][j] < min)
+                {
+                    min = cost[i][j];
+                    a = u = i;
+                    b = v = j;
+                }
+            }
+        }
+        u = find(u);
+        v = find(v);
+        if (uni(u, v))
+        {
+            printf("%d edge (%d,%d) =%d\n", ne++, a, b, min);
+            mincost += min;
+        }
+        cost[a][b] = cost[b][a] = 999;
+    }
+    printf("\n\tMinimum cost = %d\n", mincost);
+    _getch();
+}
+int find(int i)
+{
+    while (parent[i])
+        i = parent[i];
+    return i;
+}
+int uni(int i, int j)
+{
+    if (i != j)
+    {
+        parent[j] = i;
+        return 1;
+    }
+    return 0;
+}*/
+
+// Simple C++ implementation for Kruskal's
+// algorithm
+
+#define V 5
+int parent[V];
+
+// hittar själva uppsättningar av noderna
+int find(int i)
+{
+    while (parent[i] != i)
+        i = parent[i];
+    return i;
+}
+
+// Skapar union av i och j. Retunerar
+// falsk om i och j är i samma union in same redan
+void union1(int i, int j)
+{
+    int a = find(i);
+    int b = find(j);
+    parent[a] = b;
+}
+
+// själva kruskal algorimt som hittar MST
+void kruskalMST(int cost[][V])
+{
+    int mincost = 0; // lägsta kostnaden av MST.
+
+    //initierar uppsättningarna av osammanhängade uppsättningar
+    for (int i = 0; i < V; i++)
+        parent[i] = i;
+    //insätter minimum kostnade bågar en efter en
+    int edge_count = 0;
+    while (edge_count < V - 1) {
+        int min = INT_MAX, a = -1, b = -1;
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (find(i) != find(j) && cost[i][j] < min) {
+                    min = cost[i][j];
+                    a = i;
+                    b = j;
+                }
+            }
+        }
+
+        union1(a, b);
+        printf("Edge %d:(%d, %d) cost:%d \n",
+            edge_count++, a, b, min);
+        mincost += min;
+    }
+    printf("\n minsta kostnaden= %d \n", mincost);
+}
+
+// testkörning av programet
+int main()
+{
+    /* Let us create the following graph
+        2   3
+    (0)--(1)--(2)
+    |    / \   |
+   6|  8/   \5 |7
+    |  /	 \ |
+    (3)-------(4)
+          9		 */
+    int cost[][V] = {
+        { INT_MAX, 2, INT_MAX, 6, INT_MAX },
+        { 2, INT_MAX, 3, 8, 5 },
+        { INT_MAX, 3, INT_MAX, INT_MAX, 7 },
+        { 6, 8, INT_MAX, INT_MAX, 9 },
+        { INT_MAX, 5, 7, 9, INT_MAX },
+    };
+
+    // Print the solution
+    kruskalMST(cost);
+
+    return 0;
+}
